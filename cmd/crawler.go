@@ -28,7 +28,12 @@ to quickly create a Cobra application.`,
 			panic(err)
 		}
 
-		s, err := storage.New("test.sqlite")
+		dbPath, err := cmd.PersistentFlags().GetString("db-path")
+		if err != nil {
+			panic(err)
+		}
+
+		s, err := storage.New(dbPath)
 		if err != nil {
 			panic(err)
 		}
@@ -43,6 +48,8 @@ to quickly create a Cobra application.`,
 
 func init() {
 	rootCmd.AddCommand(crawlerCmd)
+
+	crawlerCmd.PersistentFlags().String("db-path", "./data.sqlite", "Path to the SQLite database file.")
 
 	// Here you will define your flags and configuration settings.
 

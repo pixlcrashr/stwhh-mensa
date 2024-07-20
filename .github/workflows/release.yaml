@@ -1,5 +1,5 @@
-name: "Deploy to production"
-run-name: "Deploy to production"
+name: "Build and create release"
+run-name: "Build and create release"
 on:
   push:
     tags:
