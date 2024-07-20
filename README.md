@@ -2,7 +2,7 @@
 
 A small and simple program to crawl the daily menu data from https://www.stwhh.de/speiseplan.
 
-The goal is to provide a good data over time and an API/website to retrieve data over longer periods of time.
+The goal is to provide good data over time and an API/website to retrieve current and past data over longer periods of time. Comparing prices over time is especially one topic of high interest.
 
 ## Getting started
 
