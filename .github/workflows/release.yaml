@@ -1,0 +1,26 @@
+name: "Deploy to production"
+run-name: "Deploy to production"
+on:
+  push:
+    tags:
+      - "v[0-9]+.[0-9]+.[0-9]+"
+jobs:
+  release-please:
+    name: Release & Deploy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '^1.22.5'
+      - run: go version
+
+      - run: go mod tidy
+      - run: go build -o stwhh-mensa_linux-amd64 main.go
+
+      - uses: softprops/action-gh-release@v2
+        with:
+          prerelease: false
+          tag_name: ${{ github.ref_name }}
+          files: ./stwhh-mensa_linux-amd64

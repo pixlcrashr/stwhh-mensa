@@ -1,0 +1,11 @@
+version: "3"
+
+tasks:
+  prerelease:
+    cmds:
+      - commit-and-tag-version -p rc
+      - git push --follow-tags origin main
+  release:
+    cmds:
+      - commit-and-tag-version
+      - git push --follow-tags origin main

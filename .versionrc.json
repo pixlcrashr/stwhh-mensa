@@ -1,0 +1,6 @@
+{
+  "commitUrlFormat": "{{host}}/pixlcrashr/stwhh-mensa/commit/{{hash}}",
+  "compareUrlFormat": "{{host}}/pixlcrashr/stwhh-mensa/compare/{{previousTag}}...{{currentTag}}",
+  "issueUrlFormat": "{{host}}/pixlcrashr/stwhh-mensa/issues/{{id}}",
+  "userUrlFormat": "{{host}}/{{user}}"
+}
