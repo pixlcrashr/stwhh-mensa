@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.2.1](https://github.com/pixlcrashr/stwhh-mensa/compare/v1.2.0...v1.2.1) (2024-07-21)
+
 ## [1.2.0](https://github.com/pixlcrashr/stwhh-mensa/compare/v1.2.0-rc.0...v1.2.0) (2024-07-21)
 
 
