@@ -8,7 +8,7 @@ The goal is to provide good data over time and an API/website to retrieve curren
 
 ### Download
 
-Simply just go to the [Releases](https://www.stwhh.de/speiseplan?t=today) section and download your desired version. Atm, only Linux builds are available.
+Simply just go to the [Releases](https://github.com/pixlcrashr/stwhh-mensa/releases) section and download your desired version. Atm, only Linux builds are available.
 
 ### Building
 
