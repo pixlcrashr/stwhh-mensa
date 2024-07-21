@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.2.0](https://github.com/pixlcrashr/stwhh-mensa/compare/v1.2.0-rc.0...v1.2.0) (2024-07-21)
+
+
+### Features
+
+* add first working relational schema ([058f10b](https://github.com/pixlcrashr/stwhh-mensa/commit/058f10b84bd40f7cd31b16b98259d751ee3e3be3))
+
 ## [1.2.0-rc.0](https://github.com/pixlcrashr/stwhh-mensa/compare/v1.1.2...v1.2.0-rc.0) (2024-07-20)
 
 
