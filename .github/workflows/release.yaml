@@ -27,6 +27,11 @@ jobs:
   release-docker-image:
     name: Release Docker Image
     runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
+      attestations: write
+      id-token: write
     steps:
       - uses: actions/checkout@v4
 
