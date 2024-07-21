@@ -1,11 +1,11 @@
 package crawler
 
-import "github.com/pixlcrashr/stwhh-mensa/pkg/model"
+import (
+	"github.com/pixlcrashr/stwhh-mensa/pkg/model"
+	"time"
+)
 
-type Result struct {
-	Dishes       []model.Dish       `json:"dishes"`
-	Categories   []model.Category   `json:"categories"`
+type Day struct {
+	Date         time.Time          `json:"date"`
 	Gastronomies []model.Gastronomy `json:"gastronomies"`
-	Allergens    []string           `json:"allergens"`
-	Symbols      []model.Symbol     `json:"symbols"`
 }

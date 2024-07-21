@@ -7,12 +7,14 @@ import (
 	"github.com/PuerkitoBio/goquery"
 	"github.com/pixlcrashr/stwhh-mensa/pkg/model"
 	"github.com/pixlcrashr/stwhh-mensa/pkg/nullable"
+	slices2 "github.com/pixlcrashr/stwhh-mensa/pkg/slices"
 	"net/http"
 	"strconv"
 	"strings"
+	"time"
 )
 
-const STWHHUrl = "https://www.stwhh.de/speiseplan?t=today"
+const STWHHUrl = "https://www.stwhh.de/speiseplan?t=this_week"
 
 type Crawler struct {
 	httpClient *http.Client
@@ -24,36 +26,204 @@ func NewCrawler() *Crawler {
 	}
 }
 
-func (c *Crawler) Crawl(ctx context.Context) (Result, error) {
-	var res Result
-
+func (c *Crawler) Crawl(ctx context.Context) ([]Day, error) {
 	resp, err := c.httpClient.Get(STWHHUrl)
 	if err != nil {
-		return res, nil
+		return nil, err
 	}
 	defer resp.Body.Close()
 	if resp.StatusCode != http.StatusOK {
-		return res, errors.New("invalid status code received")
+		return nil, errors.New("invalid status code received")
 	}
 
 	doc, err := goquery.NewDocumentFromReader(resp.Body)
 	if err != nil {
+		return nil, err
+	}
+
+	days, err := parseDays(doc)
+	if err != nil {
+		return nil, err
+	}
+
+	return days, nil
+}
+
+func parseDays(document *goquery.Document) ([]Day, error) {
+	locSel := document.Find(".tx-epwerkmenu-content .tx-epwerkmenu-menu-location-container:not(.d-none)")
+
+	var days = make([]Day, 0)
+
+	locSel.Each(func(i int, selection *goquery.Selection) {
+		loc, err := parseLocation(selection)
+		if err != nil {
+			return
+		}
+
+		categories, err := parseCategoriesWithDate(selection)
+		if err != nil {
+			return
+		}
+
+		for _, category := range categories {
+			days = slices2.AddOrSet(
+				days,
+				func(d Day) bool {
+					return d.Date == category.Date
+				},
+				func(d Day) Day {
+					d.Gastronomies = slices2.AddOrSet(
+						d.Gastronomies,
+						func(g model.Gastronomy) bool {
+							return g.ID == loc.ID
+						},
+						func(g model.Gastronomy) model.Gastronomy {
+							g.Categories = slices2.AddOrSet(
+								g.Categories,
+								func(c model.Category) bool {
+									return c.ID == category.Category.ID
+								},
+								func(c model.Category) model.Category {
+									return c
+								},
+								func() model.Category {
+									return category.Category
+								},
+							)
+							return g
+						},
+						func() model.Gastronomy {
+							return model.Gastronomy{
+								ID:       loc.ID,
+								Name:     loc.Name,
+								Location: loc.Location,
+								Categories: []model.Category{
+									category.Category,
+								},
+							}
+						},
+					)
+					return d
+				},
+				func() Day {
+					return Day{
+						Date: category.Date,
+						Gastronomies: []model.Gastronomy{
+							{
+								ID:       loc.ID,
+								Name:     loc.Name,
+								Location: loc.Location,
+								Categories: []model.Category{
+									category.Category,
+								},
+							},
+						},
+					}
+				},
+			)
+		}
+	})
+
+	return days, nil
+}
+
+func parseLocation(selection *goquery.Selection) (model.Gastronomy, error) {
+	var g model.Gastronomy
+
+	idStr, ok := selection.Attr("data-location-id")
+	if !ok {
+		return g, errors.New("gastronomy id could not be parsed")
+	}
+
+	id, err := strconv.ParseInt(idStr, 10, 32)
+	if err != nil {
+		return g, err
+	}
+
+	nameSel := selection.Find(".col-10 .offset-1 .mensainfo .row .col-12 .mensainfo__title").First()
+	locSel := selection.Find(".col-10 .offset-1 .mensainfo .row .col-12 .mensainfo__subtitle").First()
+
+	name := nameSel.Text()
+	loc := locSel.Text()
+
+	g.ID = int(id)
+	g.Name = name
+	g.Location = loc
+	g.Categories = []model.Category{}
+
+	return g, nil
+}
+
+func parseCategoriesWithDate(selection *goquery.Selection) ([]struct {
+	Date     time.Time
+	Category model.Category
+}, error) {
+	catSel := selection.Find(".row .col-12 .tx-epwerkmenu-menu-location-wrapper .tx-epwerkmenu-menu-locationpart-wrapper .tx-epwerkmenu-menu-times-wrapper .tx-epwerkmenu-menu-timestamp-wrapper")
+
+	res := make([]struct {
+		Date     time.Time
+		Category model.Category
+	}, 0)
+
+	catSel.Each(func(i int, selection *goquery.Selection) {
+		r, err := parseCategoryWithDate(selection)
+		if err != nil {
+			return
+		}
+
+		res = append(res, r)
+	})
+
+	return res, nil
+}
+
+func parseCategoryWithDate(selection *goquery.Selection) (struct {
+	Date     time.Time
+	Category model.Category
+}, error) {
+	var res struct {
+		Date     time.Time
+		Category model.Category
+	}
+
+	dateStr, ok := selection.Attr("data-timestamp")
+	if !ok {
+		return res, errors.New("attribute data-timestamp does not exist")
+	}
+
+	date, err := time.Parse(time.DateOnly, dateStr)
+	if err != nil {
 		return res, err
 	}
 
-	ds := make([]model.Dish, 0)
+	res.Date = date
 
-	doc.Find(".menue-tile").EachWithBreak(func(i int, selection *goquery.Selection) bool {
-		d, err := parseDish(selection)
+	subSel := selection.Find(".row .col-12").First()
+
+	var category model.Category
+
+	catNameSel := subSel.Find(".container-fluid .row .col-10 .menulist__categorytitle").First()
+	name := strings.Trim(catNameSel.Text(), " \n\r")
+
+	category.Name = name
+
+	dishSel := subSel.Find(".menulist__mealswrapper .container-fluid .row .col-12 .row .menue-tile")
+
+	dishes := make([]model.Dish, 0)
+
+	dishSel.Each(func(i int, selection *goquery.Selection) {
+		dish, err := parseDish(dishSel)
 		if err != nil {
-			return false
+			return
 		}
 
-		ds = append(ds, d)
-		return true
+		category.ID = dish.CategoryIDs[0]
+
+		dishes = append(dishes, dish)
 	})
 
-	res.Dishes = ds
+	category.Dishes = dishes
+	res.Category = category
 
 	return res, nil
 }
@@ -137,11 +307,22 @@ func parseDishCategoryIDs(selection *goquery.Selection) ([]int, error) {
 }
 
 func parseDishName(selection *goquery.Selection) (string, error) {
-	title := selection.Find(".singlemeal .singlemeal__top .row .col-12 .singlemeal__headline").Text()
+	title := selection.Find(".singlemeal .singlemeal__top .row .col-12 .singlemeal__headline").First().Text()
 
 	title = strings.Trim(title, " \n\r")
+	parts := strings.Split(title, "\n")
 
-	return title, nil
+	var resultParts []string
+	for _, part := range parts {
+		s := strings.Trim(part, " \n\r")
+		if len(s) == 0 {
+			continue
+		}
+
+		resultParts = append(resultParts, s)
+	}
+
+	return strings.Join(resultParts, ", "), nil
 }
 
 func parseDishAllergens(selection *goquery.Selection) ([]string, error) {

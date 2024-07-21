@@ -38,8 +38,8 @@ to quickly create a Cobra application.`,
 			panic(err)
 		}
 
-		for _, d := range res.Dishes {
-			if err := s.AddDish(d); err != nil {
+		for _, day := range res {
+			if err := s.AddDay(context.Background(), day); err != nil {
 				panic(err)
 			}
 		}
@@ -50,14 +50,4 @@ func init() {
 	rootCmd.AddCommand(crawlerCmd)
 
 	crawlerCmd.PersistentFlags().String("db-path", "./data.sqlite", "Path to the SQLite database file.")
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// crawlerCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// crawlerCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
