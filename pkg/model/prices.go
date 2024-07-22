@@ -1,3 +1,5 @@
+// Package model
+// Copyright © 2024 pixlcrashr (Vincent Heins)
 package model
 
 import "github.com/pixlcrashr/stwhh-mensa/pkg/nullable"

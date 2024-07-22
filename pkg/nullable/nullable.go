@@ -1,3 +1,5 @@
+// Package nullable
+// Copyright © 2024 pixlcrashr (Vincent Heins)
 package nullable
 
 import (

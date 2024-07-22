@@ -1,3 +1,5 @@
+// Package storage
+// Copyright © 2024 pixlcrashr (Vincent Heins)
 package storage
 
 import (

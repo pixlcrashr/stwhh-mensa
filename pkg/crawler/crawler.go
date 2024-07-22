@@ -1,3 +1,5 @@
+// Package crawler
+// Copyright © 2024 pixlcrashr (Vincent Heins)
 package crawler
 
 import (

@@ -1,6 +1,5 @@
-/*
-Copyright © 2024 NAME HERE <EMAIL ADDRESS>
-*/
+// Package main
+// Copyright © 2024 pixlcrashr (Vincent Heins)
 package main
 
 import "github.com/pixlcrashr/stwhh-mensa/cmd"

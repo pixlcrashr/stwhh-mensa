@@ -1,3 +1,5 @@
+// Package slices
+// Copyright © 2024 pixlcrashr (Vincent Heins)
 package slices
 
 func AddOrSet[T any](
