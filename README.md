@@ -1,5 +1,8 @@
 # stwhh-mensa
 
+![GitHub Actions Status](https://github.com/github/docs/actions/workflows/build.yaml/badge.svg?branch=main)
+[![Go Reference](https://pkg.go.dev/badge/github.com/pixlcrashr/stwhh-mensa.svg)](https://pkg.go.dev/github.com/pixlcrashr/stwhh-mensa)
+
 A small and simple program to crawl the daily menu data from https://www.stwhh.de/speiseplan.
 
 The goal is to provide good data over time and an API/website to retrieve current and past data over longer periods of time. Comparing prices over time is especially one topic of high interest.
@@ -9,6 +12,14 @@ The goal is to provide good data over time and an API/website to retrieve curren
 ### Download
 
 Simply just go to the [Releases](https://github.com/pixlcrashr/stwhh-mensa/releases) section and download your desired version. Atm, only Linux builds are available.
+
+### Docker
+
+To use the Docker image, run:
+
+```sh
+docker run -it -v <local-data-folder>:/opt/app/data themysteriousvincent/stwhh-mensa:latest crawler --db-path /opt/app/data/db.sqlite
+```
 
 ### Building
 
