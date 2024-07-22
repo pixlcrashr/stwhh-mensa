@@ -53,7 +53,7 @@ and the CLI-Help will be shown.
 ## Roadmap
 
 - [x] Add basic crawler
-- [ ] Add automatic crawler (daily interval crawling)
+- [x] Add automatic crawler (periodically interval crawling)
 - [ ] Update database structure (e.g. normalizing the DB schema)
 - [ ] Add a GraphQL API
 - [ ] Add a simple Frontend interface
