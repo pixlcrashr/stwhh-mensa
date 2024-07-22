@@ -3,44 +3,41 @@
 package cmd
 
 import (
-	"context"
 	"github.com/pixlcrashr/stwhh-mensa/pkg/crawler"
+	"github.com/pixlcrashr/stwhh-mensa/pkg/logger"
 	"github.com/pixlcrashr/stwhh-mensa/pkg/storage"
 	"github.com/spf13/cobra"
+	"go.uber.org/zap"
+	"time"
 )
 
 // crawlerCmd represents the crawler command
 var crawlerCmd = &cobra.Command{
 	Use:   "crawler",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Short: "Crawls the food overview of the STWHH website in intervals.",
 	Run: func(cmd *cobra.Command, args []string) {
-		c := crawler.NewCrawler()
+		l := logger.New()
 
-		res, err := c.Crawl(context.Background())
-		if err != nil {
-			panic(err)
-		}
+		c := crawler.NewCrawler()
 
 		dbPath, err := cmd.PersistentFlags().GetString("db-path")
 		if err != nil {
-			panic(err)
+			l.Fatal("could not open database", zap.Error(err))
 		}
 
 		s, err := storage.New(dbPath)
 		if err != nil {
-			panic(err)
+			l.Fatal("could not open database", zap.Error(err))
 		}
 
-		for _, day := range res {
-			if err := s.AddDay(context.Background(), day); err != nil {
-				panic(err)
-			}
+		scheduler := crawler.NewScheduler(
+			c,
+			s,
+			l,
+		)
+
+		if err := scheduler.StartAndBlock(time.Hour * 4); err != nil {
+			l.Fatal("could not open database", zap.Error(err))
 		}
 	},
 }
@@ -48,5 +45,5 @@ to quickly create a Cobra application.`,
 func init() {
 	rootCmd.AddCommand(crawlerCmd)
 
-	crawlerCmd.PersistentFlags().String("db-path", "./data.sqlite", "Path to the SQLite database file.")
+	crawlerCmd.PersistentFlags().String("db-path", "./db.sqlite", "Path to the SQLite database file.")
 }

@@ -5,7 +5,7 @@ package storage
 import (
 	"context"
 	"github.com/google/uuid"
-	"github.com/pixlcrashr/stwhh-mensa/pkg/crawler"
+	model2 "github.com/pixlcrashr/stwhh-mensa/pkg/model"
 	"github.com/pixlcrashr/stwhh-mensa/pkg/storage/model"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
@@ -44,7 +44,7 @@ func New(filepath string) (*Storage, error) {
 	}, nil
 }
 
-func (s *Storage) AddDay(ctx context.Context, day crawler.Day) (err error) {
+func (s *Storage) AddDay(ctx context.Context, day model2.Day) (err error) {
 	var workday model.Workday
 
 	if err = s.db.

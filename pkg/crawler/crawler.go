@@ -28,7 +28,7 @@ func NewCrawler() *Crawler {
 	}
 }
 
-func (c *Crawler) Crawl(ctx context.Context) ([]Day, error) {
+func (c *Crawler) Crawl(ctx context.Context) ([]model.Day, error) {
 	resp, err := c.httpClient.Get(STWHHUrl)
 	if err != nil {
 		return nil, err
@@ -51,10 +51,10 @@ func (c *Crawler) Crawl(ctx context.Context) ([]Day, error) {
 	return days, nil
 }
 
-func parseDays(document *goquery.Document) ([]Day, error) {
+func parseDays(document *goquery.Document) ([]model.Day, error) {
 	locSel := document.Find(".tx-epwerkmenu-content .tx-epwerkmenu-menu-location-container:not(.d-none)")
 
-	var days = make([]Day, 0)
+	var days = make([]model.Day, 0)
 
 	locSel.Each(func(i int, selection *goquery.Selection) {
 		loc, err := parseLocation(selection)
@@ -70,10 +70,10 @@ func parseDays(document *goquery.Document) ([]Day, error) {
 		for _, category := range categories {
 			days = slices2.AddOrSet(
 				days,
-				func(d Day) bool {
+				func(d model.Day) bool {
 					return d.Date == category.Date
 				},
-				func(d Day) Day {
+				func(d model.Day) model.Day {
 					d.Gastronomies = slices2.AddOrSet(
 						d.Gastronomies,
 						func(g model.Gastronomy) bool {
@@ -107,8 +107,8 @@ func parseDays(document *goquery.Document) ([]Day, error) {
 					)
 					return d
 				},
-				func() Day {
-					return Day{
+				func() model.Day {
+					return model.Day{
 						Date: category.Date,
 						Gastronomies: []model.Gastronomy{
 							{
