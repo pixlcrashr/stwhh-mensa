@@ -54,6 +54,7 @@ and the CLI-Help will be shown.
 
 - [x] Add basic crawler
 - [x] Add automatic crawler (periodically interval crawling)
-- [ ] Update database structure (e.g. normalizing the DB schema)
+- [x] Update database structure (e.g. normalizing the DB schema)
+- [ ] Add price same-day/same-week price changes
 - [ ] Add a GraphQL API
 - [ ] Add a simple Frontend interface
