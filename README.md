@@ -1,6 +1,6 @@
 # stwhh-mensa
 
-![GitHub Actions Status](https://github.com/github/docs/actions/workflows/build.yaml/badge.svg?branch=main)
+![GitHub Actions Status](https://github.com/pixlcrashr/stwhh-mensa/actions/workflows/build.yaml/badge.svg?branch=main)
 [![Go Reference](https://pkg.go.dev/badge/github.com/pixlcrashr/stwhh-mensa.svg)](https://pkg.go.dev/github.com/pixlcrashr/stwhh-mensa)
 
 A small and simple program to crawl the daily menu data from https://www.stwhh.de/speiseplan.
