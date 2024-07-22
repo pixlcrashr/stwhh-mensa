@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.3.0](https://github.com/pixlcrashr/stwhh-mensa/compare/v1.2.6...v1.3.0) (2024-07-22)
+
+
+### Features
+
+* add zap logger ([b496a6e](https://github.com/pixlcrashr/stwhh-mensa/commit/b496a6e1ac9fde204d0e999ac49bed528050ba86))
+
 ## [1.2.6](https://github.com/pixlcrashr/stwhh-mensa/compare/v1.2.5...v1.2.6) (2024-07-21)
 
 ## [1.2.5](https://github.com/pixlcrashr/stwhh-mensa/compare/v1.2.4...v1.2.5) (2024-07-21)
