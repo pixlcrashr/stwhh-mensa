@@ -3,16 +3,16 @@
 package model
 
 import (
-	"github.com/google/uuid"
+	"github.com/pixlcrashr/stwhh-mensa/pkg/storage/datatypes"
 	"gorm.io/gorm"
 )
 
 type Gastronomy struct {
 	gorm.Model
-	ID       uuid.UUID `gorm:"primaryKey;type:binary(128)"`
-	STWHHID  int       `gorm:"uniqueIndex:gastronomy_idx_stwhh_id"`
-	Name     string    `gorm:"index:gastronomy_idx_name"`
-	Location string    `gorm:"index:gastronomy_idx_location"`
+	ID       datatypes.UUID `gorm:"primaryKey"`
+	STWHHID  int            `gorm:"uniqueIndex:gastronomy_idx_stwhh_id"`
+	Name     string         `gorm:"index:gastronomy_idx_name"`
+	Location string         `gorm:"index:gastronomy_idx_location"`
 
 	// relations
 	GastronomyWorkdayDishes []GastronomyWorkdayDish

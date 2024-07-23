@@ -1,0 +1,4 @@
+
+db:
+  type: sqlite
+  dsn: "test.sqlite"

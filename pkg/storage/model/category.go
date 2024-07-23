@@ -2,14 +2,16 @@
 // Copyright © 2024 pixlcrashr (Vincent Heins)
 package model
 
-import "gorm.io/gorm"
-import "github.com/google/uuid"
+import (
+	"github.com/pixlcrashr/stwhh-mensa/pkg/storage/datatypes"
+	"gorm.io/gorm"
+)
 
 type Category struct {
 	gorm.Model
-	ID      uuid.UUID `gorm:"primaryKey;type:binary(128)"`
-	STWHHID int       `gorm:"uniqueIndex:category_idx_stwhh_id"`
-	Name    string    `gorm:"index:category_idx_name"`
+	ID      datatypes.UUID `gorm:"primaryKey"`
+	STWHHID int            `gorm:"uniqueIndex:category_idx_stwhh_id"`
+	Name    string         `gorm:"index:category_idx_name"`
 
 	// relations
 	DishCategories                  []DishCategory

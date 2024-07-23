@@ -4,28 +4,17 @@ package storage
 
 import (
 	"context"
-	"github.com/google/uuid"
 	model2 "github.com/pixlcrashr/stwhh-mensa/pkg/model"
+	"github.com/pixlcrashr/stwhh-mensa/pkg/storage/datatypes"
 	"github.com/pixlcrashr/stwhh-mensa/pkg/storage/model"
-	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
-	"time"
 )
 
 type Storage struct {
 	db *gorm.DB
 }
 
-func New(filepath string) (*Storage, error) {
-	db, err := gorm.Open(sqlite.Open(filepath), &gorm.Config{
-		NowFunc: func() time.Time {
-			return time.Now().UTC()
-		},
-	})
-	if err != nil {
-		return nil, err
-	}
-
+func New(db *gorm.DB) (*Storage, error) {
 	if err := db.AutoMigrate(
 		&model.Category{},
 		&model.Dish{},
@@ -51,7 +40,7 @@ func (s *Storage) AddDay(ctx context.Context, day model2.Day) (err error) {
 		WithContext(ctx).
 		Where("date = ?", day.Date).
 		Attrs(model.Workday{
-			ID:   uuid.New(),
+			ID:   datatypes.NewUUIDv4(),
 			Date: day.Date,
 		}).
 		FirstOrCreate(&workday).
@@ -64,7 +53,7 @@ func (s *Storage) AddDay(ctx context.Context, day model2.Day) (err error) {
 		if err := s.db.
 			WithContext(ctx).
 			Attrs(&model.Gastronomy{
-				ID:       uuid.New(),
+				ID:       datatypes.NewUUIDv4(),
 				STWHHID:  gastronomy.ID,
 				Name:     gastronomy.Name,
 				Location: gastronomy.Location,
@@ -81,7 +70,7 @@ func (s *Storage) AddDay(ctx context.Context, day model2.Day) (err error) {
 			if err := s.db.
 				WithContext(ctx).
 				Attrs(&model.Category{
-					ID:      uuid.New(),
+					ID:      datatypes.NewUUIDv4(),
 					STWHHID: category.ID,
 					Name:    category.Name,
 				}).
@@ -97,7 +86,7 @@ func (s *Storage) AddDay(ctx context.Context, day model2.Day) (err error) {
 				if err := s.db.
 					WithContext(ctx).
 					Attrs(&model.Dish{
-						ID:      uuid.New(),
+						ID:      datatypes.NewUUIDv4(),
 						STWHHID: dish.ID,
 						Name:    dish.Name,
 					}).
@@ -112,7 +101,7 @@ func (s *Storage) AddDay(ctx context.Context, day model2.Day) (err error) {
 				if err := s.db.
 					WithContext(ctx).
 					Attrs(&model.GastronomyWorkdayDish{
-						ID:           uuid.New(),
+						ID:           datatypes.NewUUIDv4(),
 						DishID:       dishModel.ID,
 						GastronomyID: gastronomyModel.ID,
 						WorkdayID:    workday.ID,
@@ -129,7 +118,7 @@ func (s *Storage) AddDay(ctx context.Context, day model2.Day) (err error) {
 				if err := s.db.
 					WithContext(ctx).
 					Attrs(&model.GastronomyWorkdayDishCategory{
-						ID:                      uuid.New(),
+						ID:                      datatypes.NewUUIDv4(),
 						GastronomyWorkdayDishID: gastronomyWorkdayDishModel.ID,
 						CategoryID:              categoryModel.ID,
 					}).
@@ -146,7 +135,7 @@ func (s *Storage) AddDay(ctx context.Context, day model2.Day) (err error) {
 					if err := s.db.
 						WithContext(ctx).
 						Attrs(&model.GastronomyWorkdayDishPrice{
-							ID:                      uuid.New(),
+							ID:                      datatypes.NewUUIDv4(),
 							GastronomyWorkdayDishID: gastronomyWorkdayDishModel.ID,
 							PriceType:               model.GuestPriceType,
 							Price:                   dish.Prices.Guests.Value(),
@@ -164,7 +153,7 @@ func (s *Storage) AddDay(ctx context.Context, day model2.Day) (err error) {
 					if err := s.db.
 						WithContext(ctx).
 						Attrs(&model.GastronomyWorkdayDishPrice{
-							ID:                      uuid.New(),
+							ID:                      datatypes.NewUUIDv4(),
 							GastronomyWorkdayDishID: gastronomyWorkdayDishModel.ID,
 							PriceType:               model.StudentPriceType,
 							Price:                   dish.Prices.Students.Value(),
@@ -182,7 +171,7 @@ func (s *Storage) AddDay(ctx context.Context, day model2.Day) (err error) {
 					if err := s.db.
 						WithContext(ctx).
 						Attrs(&model.GastronomyWorkdayDishPrice{
-							ID:                      uuid.New(),
+							ID:                      datatypes.NewUUIDv4(),
 							GastronomyWorkdayDishID: gastronomyWorkdayDishModel.ID,
 							PriceType:               model.EmployeePriceType,
 							Price:                   dish.Prices.Employees.Value(),
