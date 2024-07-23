@@ -1,4 +1,4 @@
 
 db:
-  type: sqlite
-  dsn: "test.sqlite"
+  type: postgresql
+  dsn: "host=postgresql user=stwhh_mensa password=stwhh_mensa dbname=stwhh_mensa port=5432 sslmode=disable TimeZone=Europe/Berlin"

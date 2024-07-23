@@ -73,16 +73,20 @@ func (s *Scheduler) process(ctx context.Context) {
 
 	days, err := s.crawler.Crawl(ctx)
 
-	s.logger.Debug("finished crawling data")
-
 	if err != nil {
 		s.logger.Error("could not crawl data", zap.Error(err))
 		return
 	}
+
+	s.logger.Debug("finished crawling data")
+
+	s.logger.Debug("adding crawled data to db")
 
 	for _, day := range days {
 		if err := s.storage.AddDay(ctx, day); err != nil {
 			s.logger.Info("could not add data", zap.Error(err))
 		}
 	}
+
+	s.logger.Debug("added crawled data to db")
 }
