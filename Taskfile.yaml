@@ -13,6 +13,7 @@ tasks:
     requires:
       vars:
         - CONFIG_FILE
+        - KUBE_CONTEXT
     dir: ./helm/charts/
     cmds:
-      - helm upgrade --install stwhh-mensa ./stwhh-mensa/ -f "{{.CONFIG_FILE}}"
+      - helm upgrade --kube-context "{{.KUBE_CONTEXT}}" --install stwhh-mensa ./stwhh-mensa/ -f "{{.CONFIG_FILE}}"
