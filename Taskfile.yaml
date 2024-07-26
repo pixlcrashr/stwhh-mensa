@@ -9,3 +9,10 @@ tasks:
     cmds:
       - commit-and-tag-version
       - git push --follow-tags origin main
+  deploy:helm:
+    requires:
+      vars:
+        - CONFIG_FILE
+    dir: ./helm/charts/
+    cmds:
+      - helm upgrade --install stwhh-mensa ./stwhh-mensa/ -f "{{.CONFIG_FILE}}"

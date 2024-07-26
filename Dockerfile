@@ -13,8 +13,8 @@ RUN CGO_ENABLED=1 go build -o ./stwhh-mensa main.go
 
 FROM alpine:3.20 AS final
 
-WORKDIR /opt/app/
+WORKDIR /app/
 
-COPY --from=build /app/stwhh-mensa /opt/app/stwhh-mensa
+COPY --from=build /app/stwhh-mensa /app/stwhh-mensa
 
 ENTRYPOINT [ "./stwhh-mensa" ]
