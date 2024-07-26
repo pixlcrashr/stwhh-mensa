@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.4.0](https://github.com/pixlcrashr/stwhh-mensa/compare/v1.3.0...v1.4.0) (2024-07-26)
+
+
+### Features
+
+* add config file & postgres driver ([f3e5eb6](https://github.com/pixlcrashr/stwhh-mensa/commit/f3e5eb6fbc239e2af3fa55713d74b9bf3fd2d951))
+* add Helm chart ([e9b5dd6](https://github.com/pixlcrashr/stwhh-mensa/commit/e9b5dd6e20437ebaf39e32b9c3496f7e0787abd0))
+
+
+### Bug Fixes
+
+* update vendor files ([c43b851](https://github.com/pixlcrashr/stwhh-mensa/commit/c43b8516214a2576737ca3b9ca380cc8f30b7f97))
+
 ## [1.3.0](https://github.com/pixlcrashr/stwhh-mensa/compare/v1.2.6...v1.3.0) (2024-07-22)
 
 
